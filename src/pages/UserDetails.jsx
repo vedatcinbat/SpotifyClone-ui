@@ -13,7 +13,7 @@ function UserDetails() {
   const [ageTyped, setAgeTyped] = useState(`${currentUser.age}`);
   const [countryTyped, setCountryTyped] = useState(`${currentUser.country}`);
   const [collegeTyped, setCollegeTyped] = useState(`${currentUser.college}`);
-  const [userImgTyped, setUserImgTyped] = useState();
+  const [userImgTyped, setUserImgTyped] = useState(`${currentUser.userImg}`);
 
   const [isDataSame, setIsDataSame] = useState(true);
 
