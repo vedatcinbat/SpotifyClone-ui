@@ -50,7 +50,7 @@ function Signup() {
           alert("This username or email is already in use");
         } else {
           await axios.post(
-            "https://cautious-slug-raincoat.cyclic.app/api/users",
+            "http://localhost:8000/api/users",
             newUser
           );
           alert("User Has Been Created!");
