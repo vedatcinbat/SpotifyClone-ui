@@ -13,12 +13,10 @@ function Signup() {
   const [likedSongs, setLikedSongs] = useState([]);
   const [playLists, setPlayLists] = useState([]);
 
-  const [sameOrNot, setSameOrNot] = useState("notsame");
-
   const navigate = useNavigate();
 
   const createUser = async () => {
-    const newUserObj = {
+    const newUser = {
       username: username,
       password: password,
       email: email,
@@ -30,28 +28,41 @@ function Signup() {
       userImg: userImg,
     };
 
-    const allUsers = await axios.get("http://localhost:8000/api/users");
-    const userData = allUsers.data.allUsers;
-    for (let i = 0; i < userData.length; i++) {
-      if (userData[i].username === newUserObj.username) {
-        setSameOrNot("sameUsername");
-      }
-      if (userData[i].email === newUserObj.email) {
-        setSameOrNot(`sameUsernamesameEmail`);
-      }
-    }
+    try {
+      const allUsersResponse = await axios.get(
+        "https://cautious-slug-raincoat.cyclic.app/api/users"
+      );
+      const userData = allUsersResponse.data.allUsers;
 
-    if (sameOrNot === "notsame") {
-      await axios
-        .post("http://localhost:8000/api/users", newUserObj)
-        .then(() => {
-          alert(`User Has Been Created !`);
-          navigate("/");
+      const userDataArray = Array.isArray(userData)
+        ? userData
+        : Object.values(userData);
+
+      if (Array.isArray(userData)) {
+        const userExists = userDataArray.some((existingUser) => {
+          return (
+            existingUser.username === newUser.username ||
+            existingUser.email === newUser.email
+          );
         });
-    } else if (sameOrNot === "sameUsername") {
-      alert(`SAME USERNAME . PLEASE TRY SOMETHIN DIFFERENT`);
-    } else if (sameOrNot === "sameUsernamesameEmail") {
-      alert(`SAME USERNAME AND SAME EMAIL. PLEASE TRY SOMETHING DIFFERENT`);
+
+        if (userExists) {
+          alert("This username or email is already in use");
+        } else {
+          await axios.post(
+            "https://cautious-slug-raincoat.cyclic.app/api/users",
+            newUser
+          );
+          alert("User Has Been Created!");
+          navigate("/");
+        }
+      } else {
+        console.error("Invalid userData format:", userData);
+        // Handle the error appropriately (e.g., show an error message)
+      }
+    } catch (error) {
+      console.error("Error creating user:", error);
+      // Handle the error appropriately (e.g., show an error message)
     }
   };
 
