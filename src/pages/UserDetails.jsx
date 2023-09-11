@@ -85,7 +85,17 @@ function UserDetails() {
     if (collegeTyped === "") {
       setCollegeTyped(`${currentUser.college}`);
     }
-  }, [userNameTyped, passwordTyped, emailTyped, ageTyped, collegeTyped]);
+    if (userImgTyped === "") {
+      setUserImgTyped(`${currentUser.userImg}`);
+    }
+  }, [
+    userNameTyped,
+    passwordTyped,
+    emailTyped,
+    ageTyped,
+    collegeTyped,
+    userImgTyped,
+  ]);
 
   const updateUser = async () => {
     const playLists = currentUser.playLists;
@@ -109,7 +119,10 @@ function UserDetails() {
       likedSongs: likedSongs,
     };
     await axios
-      .patch(`http://localhost:8000/api/users/${currentUser._id}`, updatedUser)
+      .patch(
+        `https://cautious-slug-raincoat.cyclic.app/api/users/${currentUser._id}`,
+        updatedUser
+      )
       .then(() => {
         alert("Your profile has been updated! ");
         setCurrentUser(updatedUser);
@@ -118,6 +131,7 @@ function UserDetails() {
         setEmailTyped("");
         setAgeTyped("");
         setCollegeTyped("");
+        setUserImgTyped("");
         navigate("/userdetails");
       });
   };
@@ -203,10 +217,4 @@ function UserDetails() {
 }
 
 export default UserDetails;
-{
-  /* <div>{currentUser.username}</div>
-          <div>{currentUser.password}</div>
-          <div>{currentUser.email}</div>
-          <div>{currentUser.age}</div>
-          <div>{currentUser.college}</div> */
-}
+
